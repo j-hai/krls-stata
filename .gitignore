@@ -1,0 +1,9 @@
+# R CMD check artifacts (none here, but keep noise out)
+*.smcl
+log.txt
+*.log
+.DS_Store
+Icon?
+*.swp
+.vscode/
+.idea/
