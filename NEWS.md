@@ -1,3 +1,38 @@
+# KRLS Stata 1.03
+
+## Performance
+
+* Vectorized the three pairwise-distance helpers in `krls.ado` and
+  `kpredict.ado`:
+  - `m_euclidian_distance` (used to build the kernel matrix `K`)
+  - `m_distance` (used to build pointwise derivatives)
+  - the identical helper inside `kpredict.ado`
+
+  Each was a manual `for (i; for (j ...))` Mata loop costing
+  `O(n^2 * d)` interpreted iterations. The new code uses the BLAS
+  identity `||x_i - x_j||^2 = ||x_i||^2 + ||x_j||^2 - 2 x_i' x_j`,
+  collapsing the inner work into a single `X * X'` matrix
+  multiplication. Outer-difference for derivatives is similarly one
+  broadcast.
+
+* Skipped a redundant `sqrt(...)^2` round-trip — both call sites of
+  `m_euclidian_distance` only needed the squared distance to feed
+  `exp(-d^2 / sigma)`, but the old code computed `sqrt`, returned,
+  then squared back. The new internal helper
+  `m_euclidian_distance_sq` short-circuits this. The original
+  `m_euclidian_distance` is preserved as a wrapper for any external
+  caller.
+
+Benchmark (Apple Silicon Stata 17 MP, simulated 4-predictor data):
+
+  N  =  100:  27 ms ->  21 ms   (1.29x)
+  N  =  200:  86 ms ->  65 ms   (1.32x)
+  N  =  400: 371 ms -> 295 ms   (1.26x)
+  N  =  600:1168 ms -> 993 ms   (1.18x)
+
+Numerical results unchanged — verified byte-for-byte against the
+1.01 baseline on the canonical Barro growth example.
+
 # KRLS Stata 1.02
 
 ## Bug fixes

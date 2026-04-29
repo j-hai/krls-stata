@@ -1,4 +1,4 @@
-*! version 1.02  Jeremy Ferwerda / Hainmueller / Hazlett 04/29/2026
+*! version 1.03  Jeremy Ferwerda / Hainmueller / Hazlett 04/29/2026
 
 program krls, eclass
 	version 13
@@ -356,8 +356,8 @@ void m_krls(string scalar yname, ///
 			Sdy = sqrt(vy)
 			SY[ ., . ] = (SY :- Ymv[1,.]) :/ Sdy
 		
-	// Euclidean distance
-			EDistance = -1*m_euclidian_distance(SX,n,d):^2
+	// Squared Euclidean distance (avoids sqrt that was previously squared back).
+			EDistance = -1 :* m_euclidian_distance_sq(SX, n, d)
 		
 	// Set default sigma
 	if (sigma == 0) sigma = d
@@ -661,34 +661,32 @@ matrix m_euclidian_distance_binary(real matrix X0, real matrix X1, real scalar n
 		return(D)		
 }
 
-// Euclidean Distance, used for K
-matrix m_euclidian_distance(real matrix X, real scalar n, real scalar d){
-		real matrix D
-		real scalar i,j
-		D=J(n, n, .)
-		
-		for (i=n; i>0; i--){
- 		   		for (j=1; j<=i; j++){
-       	   				D[i,j] = sqrt(sum((X[i,]-X[j,]):^2))
-       	   				D[j,i] = D[i,j]
-   		    	}
-			}
-		return(D)		
+// Squared Euclidean distance.
+// Vectorized via ||x_i - x_j||^2 = ||x_i||^2 + ||x_j||^2 - 2 x_i' x_j,
+// which is one BLAS GEMM (X * X') instead of n^2 d Mata-interpreted iterations.
+// Mata's ':+' does NOT broadcast n×1 against 1×n to outer (unlike NumPy),
+// so we expand norms explicitly to n×n via J()-products.
+// The (sq :> 0) mask floors tiny negative residuals from floating-point at zero.
+matrix m_euclidian_distance_sq(real matrix X, real scalar n, real scalar d){
+		real colvector norms
+		real matrix sq, ones
+
+		norms = rowsum(X :^ 2)
+		ones  = J(rows(X), 1, 1)
+		sq    = norms * ones' :+ ones * norms' :- 2 :* (X * X')
+		return(sq :* (sq :> 0))
 }
 
-// Distance used for derivatives
+// Euclidean distance (kept for any external callers that still rely on it).
+matrix m_euclidian_distance(real matrix X, real scalar n, real scalar d){
+		return(sqrt(m_euclidian_distance_sq(X, n, d)))
+}
+
+// Outer-difference, used for derivatives. X is n x 1; D[i,j] = X[i] - X[j].
+// Mata's ':-' does NOT broadcast n×1 against 1×n (unlike NumPy), so we
+// expand explicitly via two J()-product BLAS calls.
 matrix m_distance(real matrix X, real scalar n){
-		real matrix D
-		real scalar i,j
-		D=J(n, n, .)
-		
-		for (i=n; i>0; i--){
- 		   		for (j=1; j<=i; j++){
-       	   				D[i,j] = X[i,1]-X[j,1]
-       	   				D[j,i] = -D[i,j] 
-   		    	}
-			}
-		return(D)
+		return(X * J(1, n, 1) :- J(n, 1, 1) * X')
 }
 
 // Quantile functions [modified versions of MOREMATA]

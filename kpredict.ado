@@ -1,4 +1,4 @@
-*! version 1.02  Jeremy Ferwerda / Hainmueller / Hazlett 04/29/2026
+*! version 1.03  Jeremy Ferwerda / Hainmueller / Hazlett 04/29/2026
 
 program kpredict
 version 13
@@ -57,7 +57,7 @@ void m_krls_predictcore(real matrix X, ///
 	real matrix K
 	external real matrix pYfit, pSEfit
 
-	K= exp((-1*m_euclidian_distance(X,rows(X),cols(X)):^2)/st_numscalar("k9tmp_sigma"))
+	K= exp(-1 :* m_euclidian_distance_sq(X,rows(X),cols(X)) :/ st_numscalar("k9tmp_sigma"))
 	if (subset != 0){
 		K = K[1::subset,(subset+1)::cols(K)]		
 	}
@@ -201,19 +201,21 @@ void m_krls_predict_wrapper(string scalar trainingset, ///
  			}   
  	}				
 		
-// Euclidean Distance
-matrix m_euclidian_distance(real matrix X, real scalar n, real scalar d){
+// Squared Euclidean distance.
+// Vectorized via ||x_i - x_j||^2 = ||x_i||^2 + ||x_j||^2 - 2 x_i' x_j.
+// J()-products are needed because Mata's ':+' does not broadcast n×1 vs 1×n.
+matrix m_euclidian_distance_sq(real matrix X, real scalar n, real scalar d){
+		real colvector norms
+		real matrix sq, ones
 
-		real matrix D
-		real scalar i,j
-		D=J(n, n, .)
-		
-		for (i=n; i>0; i--){
- 		   		for (j=1; j<=i; j++){
-       	   				D[i,j] = sqrt(sum((X[i,]-X[j,]):^2))
-       	   				D[j,i] = D[i,j]
-   		    	}
-			}
-		return(D)	
+		norms = rowsum(X :^ 2)
+		ones  = J(rows(X), 1, 1)
+		sq    = norms * ones' :+ ones * norms' :- 2 :* (X * X')
+		return(sq :* (sq :> 0))
+}
+
+// Backward-compat wrapper — returns Euclidean distance (sqrt of squared).
+matrix m_euclidian_distance(real matrix X, real scalar n, real scalar d){
+		return(sqrt(m_euclidian_distance_sq(X, n, d)))
 }
 end
