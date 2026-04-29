@@ -1,0 +1,21 @@
+v 3
+d krls. Kernel-Based Regularized Least Squares
+d {bf: Jeremy Ferwerda, Department of Government, Dartmouth College}
+d {bf: Jens Hainmueller, Department of Political Science and Graduate School of Business, Stanford}
+d {bf: Chad Hazlett, Department of Statistics and Department of Political Science, UCLA}
+d
+d Implements Kernel-based Regularized Least Squares (KRLS), a machine
+d learning method to fit multidimensional functions y=f(x) for
+d regression and classification problems without relying on linearity
+d or additivity assumptions. KRLS finds the best fitting function by
+d minimizing the squared loss of a Tikhonov regularization problem,
+d using Gaussian kernels as radial basis functions. For details see
+d Hainmueller and Hazlett (2014), Political Analysis 22(2), and
+d Ferwerda, Hainmueller and Hazlett (2017), Journal of Statistical
+d Software 79(3).
+d
+d Support: jhain@stanford.edu
+f krls.ado
+f krls.sthlp
+f kpredict.ado
+f kpredict.sthlp

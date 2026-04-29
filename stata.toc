@@ -1,0 +1,3 @@
+v 3
+d j-hai's Stata routines
+p krls            Kernel-Based Regularized Least Squares

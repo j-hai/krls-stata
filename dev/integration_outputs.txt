@@ -1,0 +1,35 @@
+KRLS Stata integration tests — current source
+
+==== t1 default ====
+R2:          0.5237911523
+lambda:      0.4805161997
+sigma:       4.0000000000
+Looloss:    97.4977706922
+Eff_Deg:    16.1742104324
+
+==== t2 suppress ====
+R2:          0.5237911523
+lambda:      0.4805161997
+sigma:       4.0000000000
+Looloss:    97.4977706922
+Eff_Deg:    16.1742104324
+
+==== t3 user lambda ====
+R2:          0.5204637141
+lambda:      0.5000000000
+sigma:       4.0000000000
+Looloss:    97.4652952251
+Eff_Deg:    15.9454810793
+
+==== t4 user sigma ====
+R2:          0.5498477608
+lambda:      0.8123679580
+sigma:       2.0000000000
+Looloss:    99.3175871345
+Eff_Deg:    18.1574410309
+
+==== t5 kpredict ====
+yhat mean:      1.9388430637
+growth mean:    1.9427153967
+cor(yhat, growth):    0.7454318902
+

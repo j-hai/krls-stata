@@ -1,8 +1,8 @@
-*! version 1.01  Jeremy Ferwerda
+*! version 1.02  Jeremy Ferwerda / Hainmueller / Hazlett 04/29/2026
 
 program kpredict
-version 11
-	syntax name(name=newvarname) [if] [, Se, Fitted, Residuals]
+version 13
+	syntax name(name=newvarname) [if] [, Se Residuals]
 	
 	if ("`e(cmd)'" != "krls") error 301
 
@@ -43,7 +43,7 @@ version 11
 end
 
 
-version 11
+version 13
 mata:
 mata set matastrict on
 mata set matafavor speed

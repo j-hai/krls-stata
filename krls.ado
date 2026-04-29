@@ -1,19 +1,19 @@
-*! version 1.01  Jeremy Ferwerda
+*! version 1.02  Jeremy Ferwerda / Hainmueller / Hazlett 04/29/2026
 
 program krls, eclass
-	version 11
+	version 13
 	syntax varlist(min=2 numeric ts) [if] [in] [, Deriv ///
 			SDERIV(string) ///
 			VCov ///
 			SVCOV(string) ///
 			Keep(string) ///
 			Graph ///
-			Suppress /// 
+			Suppress ///
 			LTolerance(numlist max=1 > 0) ///
 			Sigma(numlist max=1 > 0) ///
 			Quantile(numlist max=3 > 0 < 1) ///
 			LOWERbound(numlist max=1 >= 0) ///
-			Lambda(numlist max=1 > 0)] [DOUBLE] 
+			Lambda(numlist max=1 > 0)]
 
 	foreach i of local varlist {
 		quietly summ `i'
@@ -51,7 +51,7 @@ program krls, eclass
 	
 	if ("`ltolerance'"=="") local ltolerance = 0
 	if ("`lowerbound'"=="") local lowerbound = -1	
-	if ("`svcov'" != "") local vcov = "vcov"'
+	if ("`svcov'" != "") local vcov = "vcov"
 
 	// Handle display options
 	capture confirm matrix UQuantile
@@ -168,7 +168,7 @@ program krls, eclass
 
 end
 
-version 11
+version 13
 mata:
 mata set matastrict on
 mata set matafavor speed
@@ -617,7 +617,7 @@ void m_krls(string scalar yname, ///
 			st_matrix("Output",OutputM)
  			
  			} else {
- 				"Derivatives Supressed"
+ 				printf("{txt}Derivatives suppressed\n")
  			}
 }
 
