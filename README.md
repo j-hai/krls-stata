@@ -21,6 +21,14 @@ ssc install krls, replace
 net install krls, from(https://raw.githubusercontent.com/j-hai/krls-stata/main/k/) replace
 ```
 
+When net-installing directly from GitHub, Stata installs the command
+and help files, but not the bundled example dataset. To download
+`growthdata.dta` into your current working directory, run:
+
+```stata
+net get krls, from(https://raw.githubusercontent.com/j-hai/krls-stata/main/k/)
+```
+
 ## Quick start
 
 ```stata

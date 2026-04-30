@@ -88,3 +88,10 @@ that's the canonical download for Kit and end users.
 ```stata
 net install krls, from(https://raw.githubusercontent.com/j-hai/krls-stata/main/k/) replace
 ```
+
+To download the example dataset (`growthdata.dta`) into the current
+working directory:
+
+```stata
+net get krls, from(https://raw.githubusercontent.com/j-hai/krls-stata/main/k/)
+```
