@@ -193,11 +193,11 @@ Hainmueller, J & Hazlett, C, 2014. "Kernel Regularized Least Squares: Reducing M
 
 {title:Authors}
 
-      Jeremy Ferwerda, ferwerda@mit.edu
-      MIT
+      Jeremy Ferwerda
+      Dartmouth College
 
       Jens Hainmueller, jhain@stanford.edu
       Stanford
 
-      Chad Hazlett, chazlett@mit.edu
-      MIT
+      Chad Hazlett
+      UCLA
