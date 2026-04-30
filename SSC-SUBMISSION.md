@@ -86,5 +86,5 @@ that's the canonical download for Kit and end users.
 ## Test users can do before SSC is live
 
 ```stata
-net install krls, from(https://raw.githubusercontent.com/j-hai/krls-stata/main/) replace
+net install krls, from(https://raw.githubusercontent.com/j-hai/krls-stata/main/k/) replace
 ```

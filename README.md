@@ -18,13 +18,13 @@ The method is described in:
 ssc install krls, replace
 
 * Development version from GitHub:
-net install krls, from(https://raw.githubusercontent.com/j-hai/krls-stata/main/) replace
+net install krls, from(https://raw.githubusercontent.com/j-hai/krls-stata/main/k/) replace
 ```
 
 ## Quick start
 
 ```stata
-use https://raw.githubusercontent.com/j-hai/krls-stata/main/growthdata.dta, clear
+use https://raw.githubusercontent.com/j-hai/krls-stata/main/g/growthdata.dta, clear
 
 * Fit
 krls growth rgdp60 tradeshare yearsschool assassinations, deriv vcov
