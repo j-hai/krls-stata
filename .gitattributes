@@ -1,0 +1,7 @@
+*.pkg   text eol=lf
+*.toc   text eol=lf
+*.ado   text eol=lf
+*.sthlp text eol=lf
+*.do    text eol=lf
+*.mlib  binary
+*.dta   binary
